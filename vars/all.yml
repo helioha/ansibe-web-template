@@ -1,0 +1,74 @@
+---
+
+# Apache
+# Details: https://github.com/geerlingguy/ansible-role-apache
+apache_remove_default_vhost: false
+apache_create_vhosts: true
+php_enable_php_fpm: true
+apache_mods_enabled:
+  - expires.load
+  - headers.load
+  - ssl.load
+  - rewrite.load
+  - proxy.load
+  - proxy_fcgi.load
+  - proxy_http.load
+apache_vhosts:
+  - servername: "test.project-one.com"
+    extra_parameters: Redirect permanent / https://test.project-one.com/
+  - servername: "test-test.project-one.com"
+  - servername: "test.project-two.com"
+    extra_parameters: Redirect permanent / https://test.project-two.com/
+  - servername: "test-test.project-two.com"
+apache_vhosts_ssl:
+  - servername: "test.project-one.com"
+    documentroot: "/var/www/test.project-one.com/web"
+    certificate_file: "/etc/ssl/certs/selfsigned.crt"
+    certificate_key_file: "/etc/ssl/private/selfsigned.key"
+    extra_parameters: |
+      ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000/var/www/test.project-one.com/web"
+  - servername: "test.project-two.com"
+    documentroot: "/var/www/test.project-two.com/web"
+    certificate_file: "/etc/ssl/certs/selfsigned.crt"
+    certificate_key_file: "/etc/ssl/private/selfsigned.key"
+    extra_parameters: |
+      ProxyPassMatch ^/(.*\.php(/.*)?)$ "fcgi://127.0.0.1:9000/var/www/test.project-two.com/web"
+
+# PHP
+# Details: https://github.com/geerlingguy/ansible-role-php
+php_default_version_debian: 8.1
+php_date_timezone: "America/New_York"
+php_memory_limit: "256M"
+php_upload_max_filesize: "64M"
+php_post_max_size: "64M"
+php_max_input_vars: "3000"
+php_install_recommends: true
+php_packages:
+  - php{{ php_default_version_debian }}-common
+  - php{{ php_default_version_debian }}-cli
+  - php{{ php_default_version_debian }}-dev
+  - php{{ php_default_version_debian }}-fpm
+  - libpcre3-dev
+  - php{{ php_default_version_debian }}-gd
+  - php{{ php_default_version_debian }}-curl
+  - php{{ php_default_version_debian }}-imap
+  - php{{ php_default_version_debian }}-opcache
+  - php{{ php_default_version_debian }}-xml
+  - php{{ php_default_version_debian }}-mbstring
+  - php{{ php_default_version_debian }}-apcu
+  - php{{ php_default_version_debian }}-sqlite3
+  - php{{ php_default_version_debian }}-bcmath
+  - php{{ php_default_version_debian }}-intl
+  - php{{ php_default_version_debian }}-mysql
+
+# Composer
+# Details: https://github.com/geerlingguy/ansible-role-composer
+composer_version_branch: '--2'
+
+# Drush
+# Details: https://github.com/geerlingguy/ansible-role-drush
+drush_source_install_version: "11.x"
+
+# Node.js
+# Details: https://github.com/geerlingguy/ansible-role-nodejs
+nodejs_version: "16.x"

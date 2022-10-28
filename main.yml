@@ -1,0 +1,49 @@
+---
+  - hosts: web
+
+    vars_files:
+      - vars/all.yml
+
+    tasks:
+      - name: Configure Ubuntu
+        become: true
+        import_role:
+          name: ubuntu-setup
+        tags: ['ubuntu-setup']
+
+      - name: Install Apache
+        become: true
+        import_role:
+          name: geerlingguy.apache
+        tags: ['apache']
+
+      - name: Install PHP
+        become: true
+        import_role:
+          name: geerlingguy.php
+        tags: ['php']
+          
+      - name: Configure PHP FPM for Apache
+        become: true
+        import_role:
+          name: geerlingguy.apache-php-fpm
+        tags: ['php']
+
+      - name: Install Composer
+        become: true
+        import_role:
+          name: geerlingguy.composer
+        tags: ['composer']
+
+      - name: Install Drush
+        become: true
+        import_role:
+          name: geerlingguy.drush
+        tags: ['drush']
+
+      - name: Install Node.js
+        become: true
+        import_role:
+          name: geerlingguy.nodejs
+        tags: ['nodejs']
+

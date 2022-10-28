@@ -1,0 +1,65 @@
+---
+- name: Add swap
+  become: true
+  import_role:
+    name: create-swap
+
+- name: Install unzip
+  become: true
+  apt:
+    name: unzip
+    state: present
+
+- name: Install sshfs
+  become: true
+  apt:
+    name: sshfs
+    state: present
+
+- name: Install sqlite
+  become: true
+  apt:
+    name: sqlite
+    state: present
+ 
+- name: Install MySQL client
+  become: true
+  apt:
+    name: mysql-client
+    state: present
+  tags:
+    - mysql
+
+- name: Configure git user name
+  community.general.git_config:
+    scope: global
+    name: user.name
+    value: 'Helio Ha'
+
+- name: Configure git user email
+  community.general.git_config:
+    scope: global
+    name: user.email
+    value: 'ha.helio@gmail.com'
+
+- name: Add PPA ondrej
+  apt_repository:
+    validate_certs: no
+    repo: 'ppa:ondrej/php'
+    state: present
+  tags:
+    - ondrej
+    - php
+
+- name: Generate self-signed ssl certificate
+  become: true
+  expect:
+    command: sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/selfsigned.key -out /etc/ssl/certs/selfsigned.crt
+    responses:
+      Country Name.*: US
+      State or Province Name.*: PA
+      Locality Name.*: ''
+      Organization Name.*: ''
+      Organizational Unit Name.*: ''
+      Common Name.*: ''
+      Email Address.*: ''
